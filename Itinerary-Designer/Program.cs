@@ -1,64 +1,62 @@
 using System;
-using Exchange.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Trips.Data;
-
-// using Exchange.Services;
+using Trips.Models;
+using Exchange.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Define the connection string and server version
 var connectionString = "server=localhost;user=designer;password=K9l0m15?/;database=itinerary";
-
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 37));
 
+// Configure DbContext with MySQL
 builder.Services.AddDbContext<TripDbContext>(dbContextOptions =>
     dbContextOptions.UseMySql(connectionString, serverVersion)
 );
 
-//--- end of connection syntax
+// Configure Identity
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+})
+.AddRoles<ApplicationRole>()
+.AddEntityFrameworkStores<TripDbContext>();
 
-builder
-    .Services.AddDefaultIdentity<IdentityUser>(options =>
-    {
-        options.SignIn.RequireConfirmedAccount = false;
-        options.Password.RequireDigit = false;
-        options.Password.RequiredLength = 8;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = false;
-    })
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<TripDbContext>();
-
-builder.Services.AddTransient<ExchangeRatesApiService>();
-
-// Add services to the container.
+// Add other services
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddRazorPages();
+builder.Services.AddTransient<ExchangeRatesApiService>();
 
 var app = builder.Build();
 
+// Create scope to configure roles and admin user
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-   
+    // Ensure Admin role exists
     var adminRoleExists = await roleManager.RoleExistsAsync("Admin");
     if (!adminRoleExists)
     {
-        await roleManager.CreateAsync(new IdentityRole("Admin"));
+        await roleManager.CreateAsync(new ApplicationRole { Name = "Admin" });
     }
 
- 
-    var adminUser = await userManager.FindByEmailAsync("notkyle@notkyle.com");
+    // Ensure Admin user exists
+    var adminUser = await userManager.FindByEmailAsync("admin@admin.com");
     if (adminUser == null)
     {
-        adminUser = new IdentityUser
+        adminUser = new ApplicationUser
         {
             UserName = "admin@admin.com",
             Email = "admin@admin.com"
@@ -66,16 +64,15 @@ using (var scope = app.Services.CreateScope())
 
         await userManager.CreateAsync(adminUser, "adminadmin");
 
-        
+        // Assign Admin role to Admin user
         await userManager.AddToRoleAsync(adminUser, "Admin");
     }
 }
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -84,23 +81,19 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
 
-app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-
-    endpoints.MapControllerRoute(
-        name: "users",
-        pattern: "User/{action=Index}/{id?}",
-        defaults: new { controller = "Users", action = "Index" });
-});
+app.MapControllerRoute(
+    name: "users",
+    pattern: "User/{action=Index}/{id?}",
+    defaults: new { controller = "Users", action = "Index" });
 
 app.Run();

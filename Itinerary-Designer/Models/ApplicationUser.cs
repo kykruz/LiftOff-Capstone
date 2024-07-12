@@ -6,9 +6,14 @@ namespace Trips.Models
     {
         public string UserId { get; set; }
         public string Username { get; set; }
+        public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; }
 
          public string Email { get; set; }
     }
+    public class ApplicationRole : IdentityRole
+{
+   
+}
 }
 
 

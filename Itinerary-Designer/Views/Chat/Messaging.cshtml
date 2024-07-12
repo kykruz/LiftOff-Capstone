@@ -9,9 +9,8 @@
     {
         foreach (Chat chat in Model.ChatLog)
         {
-            <div>@chat.Email</div>
             <div>
-                <label>@chat.Message - @chat.Date.ToString("yyyy-MM-dd HH:mm:ss")</label>
+                <strong>@chat.Email:</strong> @chat.Message - @chat.Date.ToString("yyyy-MM-dd HH:mm:ss")
             </div>
         }
     }
@@ -30,6 +29,14 @@
         <label for="Message">Message:</label>
         <input type="text" id="Message" name="Message" class="form-control" />
     </div>
+    <br />
+    @if (User.IsInRole("Admin")) // Assuming you have roles set up
+    {
+        <div class="form-group">
+            <label for="RecipientId">Send to:</label>
+            <input type="text" id="RecipientId" name="RecipientId" class="form-control" placeholder="Enter recipient user ID" />
+        </div>
+    }
     <br />
     <button type="submit" class="btn btn-primary">Send Message</button>
 </form>

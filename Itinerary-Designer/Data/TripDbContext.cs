@@ -7,7 +7,7 @@ using Trips.Models;
 
 namespace Trips.Data
 {
-    public class TripDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
+    public class TripDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public DbSet<Itinerary> Itineraries { get; set; }
         public DbSet<LocationData> LocationDatas { get; set; }
