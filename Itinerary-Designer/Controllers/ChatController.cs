@@ -18,6 +18,11 @@ private string GetCurrentUserId()
 {
  return User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 }
+private string GetCurrentUserEmail()
+{
+    return User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+}
+
   public ChatController(TripDbContext _context)
   {
     context = _context;
@@ -40,10 +45,11 @@ private string GetCurrentUserId()
     if(ModelState.IsValid)
     {
        string userId = GetCurrentUserId();
+       string email = GetCurrentUserEmail();
 
     Chat chat = new Chat
     {
-        Username = chatViewModel.Username,
+        Email = email,
         Message = chatViewModel.Message,
         UserId = userId,
         Date = DateTime.Now

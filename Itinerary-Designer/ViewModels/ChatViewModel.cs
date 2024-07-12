@@ -4,7 +4,7 @@ namespace Trips.ViewModels;
 
 public class ChatViewModel
 {
-    public string? Username {get; set;}
+    public string? Email {get; set;}
     public string? Message { get; set; }
     public DateTime Date {get; set;}
     public List<Chat?> ChatLog {get; set;}
