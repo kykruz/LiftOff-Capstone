@@ -12,7 +12,7 @@ using Trips.Data;
 namespace Itinerary_Designer.Migrations
 {
     [DbContext(typeof(TripDbContext))]
-    [Migration("20240712150559_first")]
+    [Migration("20240712163552_first")]
     partial class first
     {
         /// <inheritdoc />
@@ -241,6 +241,9 @@ namespace Itinerary_Designer.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

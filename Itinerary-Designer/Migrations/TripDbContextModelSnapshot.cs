@@ -240,6 +240,9 @@ namespace Itinerary_Designer.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Username")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("Chats");

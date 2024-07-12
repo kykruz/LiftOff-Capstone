@@ -43,6 +43,7 @@ private string GetCurrentUserId()
 
     Chat chat = new Chat
     {
+        Username = chatViewModel.Username,
         Message = chatViewModel.Message,
         UserId = userId,
         Date = DateTime.Now
