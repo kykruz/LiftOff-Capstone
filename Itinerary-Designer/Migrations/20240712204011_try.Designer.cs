@@ -12,7 +12,7 @@ using Trips.Data;
 namespace Itinerary_Designer.Migrations
 {
     [DbContext(typeof(TripDbContext))]
-    [Migration("20240712203515_try")]
+    [Migration("20240712204011_try")]
     partial class @try
     {
         /// <inheritdoc />
@@ -220,12 +220,9 @@ namespace Itinerary_Designer.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
