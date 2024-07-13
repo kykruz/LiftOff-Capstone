@@ -140,7 +140,7 @@ namespace Trips.Controllers
             {
                 string userId = GetCurrentUserId();
 
-                // Retrieve selected location datas based on user's selection
+                // Retrieve selected s based on user's selection
                 List<LocationData> selectedLocationDatas = await context
                     .LocationDatas.Where(ld =>
                         createItineraryViewModel.SelectedLocationIds.Contains(ld.Id)
