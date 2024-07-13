@@ -102,7 +102,8 @@ namespace Trips.Controllers
                     }
 
                     // Calculate total cost per person for selected locations
-                    decimal totalCostPerPerson = (decimal)selectedLocationDatas.Sum(ld => ld.PricePerPerson);
+                    decimal totalCostPerPerson = (decimal)
+                        selectedLocationDatas.Sum(ld => ld.PricePerPerson);
 
                     // Calculate total cost per itinerary
                     decimal totalCostPerItinerary = totalCostPerPerson * itinerary.NumberOfPeople;
@@ -118,23 +119,12 @@ namespace Trips.Controllers
             return RedirectToAction("Success");
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            CreateItineraryViewModel viewModel = new CreateItineraryViewModel();
-
-            viewModel.AvailableCategories = context
-                .LocationDatas.Select(ld => ld.Category)
-                .Distinct()
-                .ToList();
-
-            viewModel.AvailableLocations = context.LocationDatas.ToList();
-
-            return View(viewModel);
-        }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateItineraryViewModel createItineraryViewModel, int numberOfPets)
+        public async Task<IActionResult> Create(
+            CreateItineraryViewModel createItineraryViewModel,
+            int numberOfPets
+        )
         {
             if (ModelState.IsValid)
             {
@@ -162,7 +152,8 @@ namespace Trips.Controllers
                 };
 
                 // Calculate total cost per person for selected locations
-                decimal totalCostPerPerson = (decimal)selectedLocationDatas.Sum(ld => ld.PricePerPerson);
+                decimal totalCostPerPerson = (decimal)
+                    selectedLocationDatas.Sum(ld => ld.PricePerPerson);
 
                 // Calculate total cost per itinerary
                 decimal totalCostPerItinerary = totalCostPerPerson * itinerary.NumberOfPeople;
@@ -177,11 +168,19 @@ namespace Trips.Controllers
             }
 
             // If ModelState is not valid, re-populate view model and return the view with errors
-            createItineraryViewModel.AvailableCategories = context
-                .LocationDatas.Select(ld => ld.Category)
+            var availableLocations = context.LocationDatas.ToList();
+
+            // Set the IsPetFriendly property for each location
+            foreach (var location in availableLocations)
+            {
+                location.IsPetFriendly = DetermineIfPetFriendly(location);
+            }
+
+            createItineraryViewModel.AvailableCategories = availableLocations
+                .Select(ld => ld.Category)
                 .Distinct()
                 .ToList();
-            createItineraryViewModel.AvailableLocations = context.LocationDatas.ToList();
+            createItineraryViewModel.AvailableLocations = availableLocations;
 
             return View(createItineraryViewModel);
         }
@@ -331,7 +330,8 @@ namespace Trips.Controllers
                 }
 
                 // Calculate total cost per person for selected locations
-                decimal totalCostPerPerson = (decimal)selectedLocationDatas.Sum(ld => ld.PricePerPerson);
+                decimal totalCostPerPerson = (decimal)
+                    selectedLocationDatas.Sum(ld => ld.PricePerPerson);
 
                 // Calculate total cost per itinerary
                 decimal totalCostPerItinerary = totalCostPerPerson * itinerary.NumberOfPeople;
@@ -384,6 +384,38 @@ namespace Trips.Controllers
         {
             return (decimal)
                 itinerary.ItineraryLocationDatas.Sum(il => (double)il.LocationData.PricePerPerson);
+        }
+
+        // Helper method to determine if a location is pet-friendly
+        private bool DetermineIfPetFriendly(LocationData location)
+        {
+            // Example criteria to determine if a location is pet-friendly
+            if (
+                location.Description.Contains("pet-friendly", StringComparison.OrdinalIgnoreCase)
+                || location.Name.Contains("Parco", StringComparison.OrdinalIgnoreCase)
+                || location.Name.Contains("Park", StringComparison.OrdinalIgnoreCase)
+                || location.Name.Contains("Doge", StringComparison.OrdinalIgnoreCase)
+                || location.Category.Contains("Pet", StringComparison.OrdinalIgnoreCase)
+            )
+            {
+                return true;
+            }
+
+            // Add more criteria as needed
+            return false;
+        }
+
+        // Helper method to update pet-friendly status for all locations
+        private async Task UpdatePetFriendlyStatus()
+        {
+            var allLocations = await context.LocationDatas.ToListAsync();
+
+            foreach (var location in allLocations)
+            {
+                location.IsPetFriendly = DetermineIfPetFriendly(location);
+            }
+
+            await context.SaveChangesAsync();
         }
     }
 }
