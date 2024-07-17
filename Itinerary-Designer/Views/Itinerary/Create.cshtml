@@ -48,7 +48,7 @@
     <h2>Create Itinerary</h2>
     <br>
     <div class="form-container">
-        <form asp-action="Create" method="post">
+        <form asp-action="Create" method="post" id="itineraryForm">
             <div class="form-group">
                 <label for="Name">Name:</label>
                 <input type="text" id="Name" name="Name" class="form-control" />
@@ -124,9 +124,10 @@
             <br>
             <div class="form-group">
                 <label asp-for="NumberOfPeople">Number of People:</label>
-                <input asp-for="NumberOfPeople" type="number" class="form-control" id="NumberOfPeople" />
+                <input asp-for="NumberOfPeople" type="number" class="form-control" id="NumberOfPeople" min="1" />
                 <span asp-validation-for="NumberOfPeople" class="text-danger"></span>
             </div>
+
             <br>
             <div class="form-group">
                 <label asp-for="NumberOfPets">Number of Pets:</label>
@@ -144,7 +145,6 @@
             </div>
             <br>
             <button type="submit" class="btn btn-primary btn-lg btn-block">Create Itinerary</button>
-
         </form>
     </div>
 
@@ -189,6 +189,14 @@
                                 }
                             });
                         }
+                    }
+                });
+
+                $('#itineraryForm').submit(function (event) {
+                    var numberOfPeople = $('#NumberOfPeople').val();
+                    if (numberOfPeople >= 10) {
+                        alert("Call us to book itineraries for parties of 10 or more");
+                        event.preventDefault();
                     }
                 });
             });

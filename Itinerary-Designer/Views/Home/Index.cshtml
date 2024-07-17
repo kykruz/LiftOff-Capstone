@@ -1,45 +1,91 @@
-﻿<!DOCTYPE html>
+﻿@using Newtonsoft.Json
+
+
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Dancing+Script:wght@400..700&family=Playwrite+AT:ital,wght@0,100..400;1,100..400&family=Playwrite+RO:wght@100..400&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Dancing+Script:wght@400..700&family=Playwrite+AT:ital,wght@0,100..400;1,100..400&family=Playwrite+RO:wght@100..400&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
 
     <!-- Additional CSS -->
     <style>
-        @* .background-image {
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/a/a3/Canal_Grande_Chiesa_della_Salute_e_Dogana_dal_ponte_dell_Accademia.jpg');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            color: white;
-            text-align: center;
-            padding-top: 20%;
-            font-family: 'Dancing Script', cursive; /* Use Dancing Script for the welcome message */
-        } *@
 
-        .welcome-message {
-            font-size: 3rem; /* Example font size */
-            font-weight: 400; /* Example font weight */
-            margin-bottom: 1rem; /* Example margin */
+
+       
+        
+        @*.background-image{background-image:url('https://upload.wikimedia.org/wikipedia/commons/a/a3/Canal_Grande_Chiesa_della_Salute_e_Dogana_dal_ponte_dell_Accademia.jpg');background-size:cover;background-position:center;height:100vh;color:white;text-align:center;padding-top:20%;font-family:'DancingScript',cursive;/*UseDancingScriptforthewelcomemessage*/}*@.welcome-message {
+             .welcome-message {
+          font-size: 3rem;
+           
+            font-weight: 400;
+            margin-bottom: 1rem;
+           
         }
     </style>
 </head>
-<body>
-    <div class="background-image">
-         @if (User.IsInRole("Admin"))
+
+@{
+    string weatherData = ViewData["WeatherData"] as string;
+
+    @if (!string.IsNullOrEmpty(weatherData))
     {
-        <h1 class="display-4 welcome-message">Welcome back, @Model.Username!</h1>
+        dynamic weather = JsonConvert.DeserializeObject(weatherData);
+
+        <div class="weather-container">
+            <div class="weather-box">
+                <h2>Current Weather in Venice, Italy</h2>
+
+                <div class="current-weather-box">
+                    <div class="weather-icon">
+                        @{
+                            string iconSetName = "set01"; // Example: You can choose the set dynamically based on some criteria
+                            string iconSize = "medium"; // Example: You can choose the size dynamically
+                            int currentIconNumber = weather.current.icon_num; // Assuming icon_num is the icon number from your API
+                            string iconFileName = $"~/images/weather_icons/{iconSetName}/{iconSize}/{currentIconNumber}.png";
+                            string iconPath = Url.Content(iconFileName);
+                        }
+                        <img src="@iconPath" alt="Current Weather Icon" />
+                    </div>
+
+                    <div class="weather-details">
+                        <p><strong>Temperature:</strong> @weather.current.temperature °C</p>
+                        <p><strong>Summary:</strong> @weather.current.summary</p>
+                        <p><strong>Wind:</strong> @weather.current.wind.speed m/s from @weather.current.wind.dir</p>
+                        <p><strong>Cloud Cover:</strong> @weather.current.cloud_cover %</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
     else
     {
-        <h1 class="display-4 welcome-message">Venice is Waiting for you, @Model.Username!</h1>
+        <p>Weather data unavailable</p>
     }
+
+}
+
+</div>
+
+
+<body>
+    <div class="background-image">
+        @if (User.IsInRole("Admin"))
+        {
+            <h1 class="display-4 welcome-message">Welcome back, @Model.Username!</h1>
+        }
+        else
+        {
+            <h1 class="display-4 welcome-message">Venice is Waiting for you, @Model.Username!</h1>
+        }
 
         @if (ViewData["Error"] != null)
         {
@@ -48,7 +94,6 @@
             </div>
         }
     </div>
-
-    <!-- Add any scripts or additional content after your main content -->
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Exchange.Services;
 using Itinerary_Designer.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -7,24 +8,30 @@ using Trips.Models;
 using Trips.ViewModels;
 
 namespace Trips.Controllers;
-// branchstuf
+
+
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly ExchangeRatesApiService _exchangeRatesApi;
+    private readonly WeatherService _weatherService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController()
     {
-        _logger = logger;
-        _exchangeRatesApi = new ExchangeRatesApiService(); //initalizing
+        _weatherService = new WeatherService();
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         var userViewModel = new UserViewModel
         {
             Username = User.Identity.IsAuthenticated ? User.Identity.Name : "Guest"
         };
+
+        string placeId = "venice"; 
+        string apiKey = "gyfpqgn0mw1m83g5pm4mdgulqbh13asty8o4rwva";
+
+        string weatherData = await _weatherService.GetWeatherAsync(placeId, apiKey);
+
+        ViewData["WeatherData"] = weatherData;
 
         return View(userViewModel);
     }
@@ -41,6 +48,7 @@ public class HomeController : Controller
             new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }
         );
     }
+
 
     //Action for the Currency Conversion
     [HttpPost]
@@ -69,4 +77,5 @@ public class HomeController : Controller
             return View("Index");
         }
     }
+
 }

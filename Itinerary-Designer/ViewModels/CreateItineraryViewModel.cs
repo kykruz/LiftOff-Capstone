@@ -21,6 +21,7 @@ public class CreateItineraryViewModel
 
     public List<string> SelectedCategories { get; set; }
 
+    [Range(1, int.MaxValue, ErrorMessage = "Number of people must be at least 1.")]
     public int NumberOfPeople { get; set; }
 
     public decimal TotalCost { get; set; }

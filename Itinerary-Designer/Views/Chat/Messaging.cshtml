@@ -1,80 +1,103 @@
-@using Trips.ViewModels;
-@using Trips.Models;
+@using Trips.ViewModels
 @model ChatViewModel
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Chat Messages</title>
+    <title>Admin Chat Messages</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif; /* Example of fallback font */
+            font-family: 'Arial', sans-serif;
         }
+
         .chat-container {
             max-width: 800px;
             margin: auto;
             padding: 20px;
         }
+
         .chat-message {
             background-color: #f0f0f0;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 5px;
         }
+
         .chat-message label {
             font-size: 16px;
             font-weight: bold;
             color: #333;
         }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         .btn-primary {
             background-color: #007bff;
             border-color: #007bff;
         }
+
         .btn-primary:hover {
             background-color: #0069d9;
             border-color: #0062cc;
         }
     </style>
 </head>
+
 <body>
-
-<div class="container mt-4 chat-container">
-    <h2 class="text-center mb-4" style="font-family: 'Dancing Script', cursive;">Chat Messages</h2>
-
-    <div>
-        @if (Model.ChatLog != null && Model.ChatLog.Any())
-        {
-            foreach (Chat chat in Model.ChatLog)
+    <div class="container mt-4 chat-container">
+        <h2 class="text-center mb-4" style="font-family: 'Dancing Script', cursive;">Admin Chat Messages</h2>
+        <div>
+            @if (Model.ChatLog != null && Model.ChatLog.Any())
             {
-                <div class="chat-message">
-                    <label>@chat.Message - @chat.Date.ToString("yyyy-MM-dd HH:mm:ss")</label>
-                </div>
+                string currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+                foreach (var chat in Model.ChatLog)
+                {
+                    @if (chat.UserId == currentUserId && !chat.IsAdminResponse)
+                    {
+                        <div class="chat-message">
+                            <label>Your Message:</label>
+                            <p>@chat.Message - @chat.Date.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                            <hr />
+                            @if (chat.OriginalChat != null && chat.OriginalChat.IsAdminResponse)
+                            {
+                                <label>Admin Response:</label>
+                                <p>@chat.OriginalChat.Message - @chat.OriginalChat.Date.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                            }
+                        </div>
+                    }
+                    else if (chat.IsAdminResponse && chat.OriginalChat != null && chat.OriginalChat.UserId == currentUserId)
+                    {
+                        <div class="chat-message">
+                            <label>Admin Response:</label>
+                            <p>@chat.Message - @chat.Date.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                        </div>
+                    }
+                }
             }
-        }
-        else
-        {
-            <p>No chat messages available.</p>
-        }
-    </div>
-
-    <hr />
-
-    <h2 class="text-center mt-4 mb-3" style="font-family: 'Dancing Script', cursive;">Send a Message</h2>
-
-    <form asp-controller="Chat" asp-action="Messaging" method="post">
-        <div class="form-group">
-            <label for="Message">Message:</label>
-            <input type="text" id="Message" name="Message" class="form-control" />
+            else
+            {
+                <p>No admin chat messages available.</p>
+            }
         </div>
-        <button type="submit" class="btn btn-primary">Send Message</button>
-    </form>
-</div>
 
+        <hr />
+
+        <h2 class="text-center mt-4 mb-3" style="font-family: 'Dancing Script', cursive;">Send a Message</h2>
+        <form asp-controller="Chat" asp-action="Messaging" method="post">
+            <div class="form-group">
+                <label for="Message">Message:</label>
+                <input type="text" id="Message" name="Message" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+    </div>
 </body>
+
 </html>
