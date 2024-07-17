@@ -60,13 +60,13 @@ public class HomeController : Controller
     {
         try
         {
-            // Exchange.Services.ConvertRequest request = new Exchange.Services.ConvertRequest(fromCurrency, toCurrency, amount);
+            Exchange.Services.ConvertRequest request = new Exchange.Services.ConvertRequest(fromCurrency, toCurrency, amount);
             // Exchange.Services.ConvertResponse response = await _exchangeRatesApi.ConvertAsync(request);
 
-            //Preparing data to pass to the View
-            // ViewData["Amount"] = amount;
-            // ViewData["FromCurrency"] = fromCurrency;
-            // ViewData["ToCurrency"] = toCurrency;
+            // Preparing data to pass to the View
+            ViewData["Amount"] = amount;
+            ViewData["FromCurrency"] = fromCurrency;
+            ViewData["ToCurrency"] = toCurrency;
             // ViewData["ConvertedAmount"] = response.Result;
 
             return View("Index");
