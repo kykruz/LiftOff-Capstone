@@ -14,6 +14,7 @@ public class HomeController : Controller
 {
     private readonly ExchangeRatesApiService _exchangeRatesApi;
     private readonly WeatherService _weatherService;
+    private readonly ExchangeRatesApiService exchangeRatesApi;
 
     public HomeController(ExchangeRatesApiService exchangeRatesApi)
     {
