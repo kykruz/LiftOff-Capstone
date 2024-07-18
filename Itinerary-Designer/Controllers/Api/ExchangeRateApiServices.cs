@@ -12,9 +12,9 @@ namespace Exchange.Services
         private readonly string _baseUrl = "https://api.apilayer.com/exchangerates_data";
         
 
-        public ExchangeRatesApiService()
+        public ExchangeRatesApiService(HttpClient httpClient)
         {
-            _httpClient = new HttpClient();
+            _httpClient = httpClient;
         }
 
         public async Task<ConvertResponse> ConvertAsync(ConvertRequest request)

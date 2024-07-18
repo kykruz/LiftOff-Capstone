@@ -58,7 +58,7 @@ public class HomeController : Controller
         string fromCurrency,
         string toCurrency,
         double amount
-            //  string _exchangeRatesApi
+            
     )
     {
         try
@@ -71,14 +71,14 @@ public class HomeController : Controller
             ViewData["Amount"] = amount;
             ViewData["FromCurrency"] = fromCurrency;
             ViewData["ToCurrency"] = toCurrency;
-            //  ViewData["ConvertedAmount"] = response.Result;
+             ViewData["ConvertedAmount"] = response.Result;
 
-            return View("Currency");
+            return View("Index");
         }
         catch (Exception ex)
         {
             ViewData["Error"] = ex.Message;
-            return View("Currency");
+            return View("Index");
         }
     }
 
