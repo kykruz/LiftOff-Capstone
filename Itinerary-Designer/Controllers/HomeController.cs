@@ -12,11 +12,13 @@ namespace Trips.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly ExchangeRatesApiService _exchangeRatesApi;
     private readonly WeatherService _weatherService;
 
-    public HomeController()
+    public HomeController(ExchangeRatesApiService exchangeRatesApi)
     {
         _weatherService = new WeatherService();
+        _exchangeRatesApi = exchangeRatesApi;
     }
 
     public async Task<IActionResult> Index()
@@ -51,30 +53,32 @@ public class HomeController : Controller
 
 
     //Action for the Currency Conversion
-    [HttpPost]
+    [HttpGet("currency")]
     public async Task<IActionResult> CovertCurrency(
         string fromCurrency,
         string toCurrency,
         double amount
+            //  string _exchangeRatesApi
     )
     {
         try
         {
-            Exchange.Services.ConvertRequest request = new Exchange.Services.ConvertRequest(fromCurrency, toCurrency, amount);
-            // Exchange.Services.ConvertResponse response = await _exchangeRatesApi.ConvertAsync(request);
-
-            // Preparing data to pass to the View
+            // ConvertRequest request = new ConvertRequest(fromCurrency, toCurrency, amount);
+            // ConvertResponse response = await _exchangeRatesApi.ConvertAsync(request);
+               var request = new ConvertRequest(fromCurrency, toCurrency, amount);
+                var response = await _exchangeRatesApi.ConvertAsync(request);
+            //Preparing data to pass to the View
             ViewData["Amount"] = amount;
             ViewData["FromCurrency"] = fromCurrency;
             ViewData["ToCurrency"] = toCurrency;
-            // ViewData["ConvertedAmount"] = response.Result;
+            //  ViewData["ConvertedAmount"] = response.Result;
 
-            return View("Index");
+            return View("Currency");
         }
         catch (Exception ex)
         {
             ViewData["Error"] = ex.Message;
-            return View("Index");
+            return View("Currency");
         }
     }
 
