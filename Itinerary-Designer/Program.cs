@@ -91,7 +91,22 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 
-app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "default", 
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "quicktour",
+    pattern: "QuickTour/{action=Index}/{id?}",
+    defaults: new { controller = "QuickTour", action = "Index" } 
+
+);
+
+app.MapControllerRoute(
+    name: "users",
+    pattern: "User/{action=Index}/{id?}",
+    defaults: new { controller = "Users", action = "Index" }
+);
 
 app.UseEndpoints(endpoints =>
 {

@@ -1,9 +1,15 @@
-@using Trips.Models
-@using Trips.ViewModels
+@model Trips.ViewModels.QuickTourViewModel
 
+@{
+    ViewData["Title"] = "Quick Tour";
+}
 
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
     <style>
         h2 {
             font-family: 'Dancing Script', cursive;
@@ -11,11 +17,18 @@
             text-align: center;
             margin-top: 20px;
         }
+        .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
     </style>
 </head>
 <body>
-    <h2 data-aos="fade-up">Quick Tour</h2>
-    <div>
-        <iframe width="752" height="480" src="https://www.youtube.com/embed/JphHw6iU4m8" title="Experience Venice’s Spectacular Beauty in Under 4 Minutes | Short Film Showcase" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <h2 data-aos="fade-up">@Model.Title</h2>
+    <div class="video-container">
+        <iframe width="752" height="480" src="@Model.VideoUrl" title="@Model.Title" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
 </body>
+</html>
