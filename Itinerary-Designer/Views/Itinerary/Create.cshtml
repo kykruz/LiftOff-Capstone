@@ -7,20 +7,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Itinerary</title>
+    <!-- Link to Bootstrap CSS for styling -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Link to Bootstrap Icons for icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
+        /* Styling for even rows in the categories section */
         .even-row-category {
             background-color: rgba(255, 193, 7, 0.1);
-            /* Slightly light yellow background */
         }
 
+        /* Styling for even rows in the locations section */
         .even-row-location {
             background-color: rgba(0, 123, 255, 0.1);
-            /* Slightly light blue background */
         }
 
+        /* Container styling for the form */
         .form-container {
             max-width: 70%;
             margin: 0 auto;
@@ -33,22 +36,27 @@
     <h2>Create Itinerary</h2>
     <br>
     <div class="form-container">
+        <!-- Form to create an itinerary, with POST method to "Create" action -->
         <form asp-action="Create" method="post" id="itineraryForm">
+            <!-- Input field for itinerary name -->
             <div class="form-group">
                 <label for="Name">Name:</label>
                 <input type="text" id="Name" name="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <br>
+            <!-- Checkboxes to select categories -->
             <div class="form-group">
                 <label>Select Categories:</label><br />
                 <br>
+                <!-- Checkbox for "All Categories" option -->
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" name="SelectedCategories" value="All" id="allCategories" checked />
                         All Categories
                     </label>
                 </div>
+                <!-- Loop through available categories and create a checkbox for each -->
                 @for (var i = 0; i < Model.AvailableCategories.Count; i++)
                 {
                     var category = Model.AvailableCategories[i];
@@ -63,20 +71,23 @@
                 }
             </div>
             <br>
+            <!-- Checkboxes to select locations -->
             <div class="form-group">
                 <label>Select Locations:</label><br />
                 <br>
+                <!-- Loop through available locations and create a checkbox for each -->
                 @for (var i = 0; i < Model.AvailableLocations.Count; i++)
                 {
                     var location = Model.AvailableLocations[i];
                     bool isChecked = Model.SelectedLocationIds.Contains(location.Id);
-                     <div class="checkbox location-checkbox @((i % 2 == 0) ? "even-row-location" : "")"
+                    <!-- Each checkbox is assigned a category for filtering purposes -->
+                    <div class="checkbox location-checkbox @((i % 2 == 0) ? "even-row-location" : "")"
                         data-category="@location.Category">
                         <label>
                             <input type="checkbox" name="SelectedLocationIds" value="@location.Id" checked="@isChecked" />
                             @location.Name
                         </label>
-                        @* <span class="price-per-person">$@location.PricePerPerson.ToString("0.00")</span> per person *@
+                        <!-- Display a different icon based on the category of the location -->
                         @if (location.Category == "Restaurant")
                         {
                             <i class="bi bi-egg-fried float-start"></i>
@@ -86,9 +97,9 @@
                             <i class="bi bi-cup-straw float-start"></i>
                         }
                         else if (location.Category == "Boat Ride")
-                {
-                    <i class="bi bi-droplet-half float-start"></i>
-                }
+                        {
+                            <i class="bi bi-droplet-half float-start"></i>
+                        }
                         else if (location.Category == "Park")
                         {
                             <i class="bi bi-tree-fill float-start"></i>
@@ -107,6 +118,7 @@
             </div>
 
             <br>
+            <!-- Input field for the number of people -->
             <div class="form-group">
                 <label asp-for="NumberOfPeople">Number of People:</label>
                 <input asp-for="NumberOfPeople" type="number" class="form-control" id="NumberOfPeople" min="1" />
@@ -114,6 +126,7 @@
             </div>
 
             <br>
+            <!-- Dropdown to select the number of pets -->
             <div class="form-group">
                 <label asp-for="NumberOfPets">Number of Pets:</label>
                 <select asp-for="NumberOfPets" class="form-control" id="NumberOfPets">
@@ -123,23 +136,27 @@
                 </select>
             </div>
             <br>
+            <!-- Input field for the date -->
             <div class="form-group">
                 <label for="Date">Date:</label>
                 <input type="date" id="Date" name="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <br>
+            <!-- Submit button to create the itinerary -->
             <button type="submit" class="btn btn-primary btn-lg btn-block">Create Itinerary</button>
         </form>
     </div>
 
+    <!-- Script references for Bootstrap and jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    <!-- Section for additional scripts -->
     @section Scripts {
         <script>
             $(document).ready(function () {
-                // Initially hide all location checkboxes if "All Categories" is selected
+                // Show all location checkboxes if "All Categories" is selected
                 if ($('#allCategories').is(':checked')) {
                     $('.location-checkbox').show();
                 } else {
@@ -150,14 +167,17 @@
                 $('input[name="SelectedCategories"]').change(function () {
                     if ($(this).attr('id') === 'allCategories') {
                         if ($(this).is(':checked')) {
+                            // Uncheck other categories and show all locations
                             $('.category-checkbox').prop('checked', false);
                             $('.location-checkbox').show();
                         } else {
+                            // Hide all locations if "All Categories" is unchecked
                             $('.location-checkbox').hide();
                         }
                     } else {
                         $('#allCategories').prop('checked', false);
 
+                        // Get selected categories
                         var selectedCategories = $('input[name="SelectedCategories"]:checked').map(function () {
                             return $(this).val();
                         }).get();
@@ -165,6 +185,7 @@
                         if (selectedCategories.length === 0) {
                             $('.location-checkbox').hide();
                         } else {
+                            // Show or hide locations based on selected categories
                             $('.location-checkbox').each(function () {
                                 var category = $(this).data('category');
                                 if (selectedCategories.includes(category)) {
@@ -177,6 +198,7 @@
                     }
                 });
 
+                // Alert if trying to book for 10 or more people and prevent form submission
                 $('#itineraryForm').submit(function (event) {
                     var numberOfPeople = $('#NumberOfPeople').val();
                     if (numberOfPeople >= 10) {

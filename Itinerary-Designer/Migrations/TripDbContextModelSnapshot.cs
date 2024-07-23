@@ -373,6 +373,9 @@ namespace Itinerary_Designer.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsPetFriendly")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int?>("ItineraryId")
                         .HasColumnType("int");
 
