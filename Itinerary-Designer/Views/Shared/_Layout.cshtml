@@ -1,12 +1,19 @@
 ﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Character encoding for the document -->
     <meta charset="utf-8" />
+    <!-- Sets the viewport to make the website look good on all devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <!-- Title of the document, including dynamic content from ViewData -->
     <title>@ViewData["Title"] - Itinerary Designer</title>
+    <!-- Link to Bootstrap CSS for styling -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+     <!-- Link to site-specific CSS, with versioning to prevent caching issues -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+     <!-- Link to additional custom CSS for the Itinerary Designer, with versioning -->
     <link rel="stylesheet" href="~/Itinerary_Designer.styles.css" asp-append-version="true" />
+     <!-- Inline styles for specific elements -->
     <style>
      .background-image {
     background-image: url('https://upload.wikimedia.org/wikipedia/commons/a/a3/Canal_Grande_Chiesa_della_Salute_e_Dogana_dal_ponte_dell_Accademia.jpg');
@@ -43,39 +50,52 @@
 
 <body>
     <header>
+          <!-- Navigation bar with dynamic classes based on user role -->
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light @(User.IsInRole("Admin") ? "navbar-admin" : "bg-light-blue") border-bottom box-shadow mb-3">
             <div class="container-fluid">
+                  <!-- Brand/logo link to home page -->
                 <a class="navbar-brand dancing-script" asp-area="" asp-controller="Home" asp-action="Index">
-                    @* different img for admin and user in logo *@
+                     <!-- Different logo image for admin and regular user -->
                      <img src="@(User.IsInRole("Admin") ? "https://i.imgur.com/L4B1T0z.png" : "https://i.imgur.com/nJKS51G.jpg")" alt="Logo" style="height: 70px; padding: 10px;" />
-                    Itinerary Designer <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+                    Itinerary Designer 
+                     <!-- SVG icon for home -->
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
   <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/>
   <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/>
 </svg>
                 </a>
+                <!-- Button for toggling the navbar on smaller screens -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                 <!-- Partial view for login/logout functionality -->
                 <partial name="_LoginPartial" />
+                 <!-- Collapsible navbar content -->
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                         <!-- Links visible to regular users -->
                         @if (!User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Itinerary" asp-action="Index"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Itinerary" asp-action="Index">
+                                    <!-- SVG icon for create itinerary -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5"/>
   <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
 </svg><br>Create Itinerary</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Itinerary" asp-action="Success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Itinerary" asp-action="Success">
+                                    <!-- SVG icon for all itineraries -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
   <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
   <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
 </svg><br>All Itineraries</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <!-- SVG icon for more options -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
 </svg><br>
                                     More
@@ -99,6 +119,7 @@
                                 </ul>
                             </li>
                         }
+                         <!-- Links visible only to admin users -->
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
@@ -135,7 +156,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @* Optional: Include RenderSection for additional scripts *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
