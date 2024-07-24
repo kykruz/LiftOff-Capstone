@@ -1,4 +1,4 @@
-namespace YourNamespace.ViewModels
+namespace Trips.ViewModels
 {
     public class QuickTourViewModel
     {

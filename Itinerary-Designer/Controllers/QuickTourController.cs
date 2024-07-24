@@ -1,6 +1,14 @@
+using System;
+using System.IO;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Trips.Data;
+using Trips.Models;
+using Trips.ViewModels;
 
-namespace YourNamespace.Controllers
+namespace Trips.Controllers
 {
     public class QuickTourController : Controller
     {
