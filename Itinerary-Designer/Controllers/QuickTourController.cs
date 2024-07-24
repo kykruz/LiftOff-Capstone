@@ -10,6 +10,7 @@ using Trips.ViewModels;
 
 namespace Trips.Controllers
 {
+    [Route("QuickTour")]
     public class QuickTourController : Controller
     {
         public IActionResult Index()
