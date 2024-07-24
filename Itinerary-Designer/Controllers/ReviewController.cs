@@ -15,7 +15,7 @@ namespace Trips.Controllers
         private readonly TripDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        // TripDbContext for database operations and IWebHostEnvironment to manage file uploads.
+        
         public ReviewController(TripDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
@@ -24,8 +24,7 @@ namespace Trips.Controllers
 
         public IActionResult Index()
         {
-            // Retrieves all reviews from the database (_context.Reviews.ToList())
-            // and maps them to ReviewViewModels
+            
             var reviews = _context.Reviews.ToList();
             var reviewViewModels = reviews
                 .Select(r => new ReviewViewModel
@@ -41,7 +40,7 @@ namespace Trips.Controllers
         }
 
         [HttpGet]
-        //GET Create: Renders the form to create a new review (Create.cshtml).
+      
         public IActionResult Create()
         {
             var reviewViewModel = new ReviewViewModel();
@@ -81,7 +80,7 @@ namespace Trips.Controllers
                 }
                 else
                 {
-                    // If no image file provided, set a default image path or handle accordingly
+                    
                     review.ImagePath = "/images/default-image.png";
                 }
 
@@ -91,7 +90,7 @@ namespace Trips.Controllers
                 return RedirectToAction("Index", "Review"); // Redirect to the review listing page
             }
 
-            // If ModelState is not valid, return to the Create view with the model
+           
             return View("Create", reviewViewModel);
         }
 

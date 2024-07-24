@@ -16,9 +16,7 @@ namespace Exchange.Services
 
         private readonly string _baseUrl = "https://api.apilayer.com/exchangerates_data";
 
-        //         https://api.apilayer.com/exchangerates_data/convert?to={to}&from={from}&amount={amount}");
-        // client.Timeout = -1;
-
+       
         public ExchangeRatesApiService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
