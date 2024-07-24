@@ -1,0 +1,30 @@
+@* @model Trips.ViewModels.EditReviewViewModel
+
+<h2>Edit Review</h2>
+
+@using (Html.BeginForm("Edit", "Review", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Username)
+        @Html.TextBoxFor(model => model.Username, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title)
+        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ReviewPost)
+        @Html.TextAreaFor(model => model.ReviewPost, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ReviewPost, "", new { @class = "text-danger" })
+    </div>
+
+    @Html.HiddenFor(model => model.ReviewId)
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+} *@
