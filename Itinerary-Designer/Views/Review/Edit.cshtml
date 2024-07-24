@@ -1,22 +1,30 @@
-@* @model Trips.ViewModels.ReviewViewModel
+@* @model Trips.ViewModels.EditReviewViewModel
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
-    <div>
-        <label asp-for="Title"></label>
-        <input asp-for="Title" />
-        <span asp-validation-for="Title"></span>
+<h2>Edit Review</h2>
+
+@using (Html.BeginForm("Edit", "Review", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Username)
+        @Html.TextBoxFor(model => model.Username, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
     </div>
-    <div>
-        <label asp-for="ReviewPost"></label>
-        <textarea asp-for="ReviewPost"></textarea>
-        <span asp-validation-for="ReviewPost"></span>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title)
+        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
     </div>
-    <div>
-        <label asp-for="ImageFile"></label>
-        <input type="file" asp-for="ImageFile" />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ReviewPost)
+        @Html.TextAreaFor(model => model.ReviewPost, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ReviewPost, "", new { @class = "text-danger" })
     </div>
-    <div>
-        <button type="submit">Save Changes</button>
-    </div>
-</form>  *@
+
+    @Html.HiddenFor(model => model.ReviewId)
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+} *@

@@ -394,10 +394,6 @@ namespace Trips.Controllers
 
             decimal totalCostForAllPeople = totalCostForAllLocations * numberOfPeople;
             
-
-
-            // Get the USD to EUR exchange rate
-            // decimal usdToEurRate = await _exchangeRatesApiService.GetUsdToEurRateAsync();
           
             string FromCurrency = "USD";
             string ToCurrency = "EUR";

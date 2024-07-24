@@ -49,34 +49,4 @@ public class HomeController : Controller
             new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }
         );
     }
-
-
-    //Action for the Currency Conversion
-    // [HttpPost]
-    // public async Task<IActionResult> CovertCurrency(
-    //     string fromCurrency,
-    //     string toCurrency,
-    //     double amount
-    // )
-    // {
-    //     try
-    //     {
-    //         Exchange.Services.ConvertRequest request = new Exchange.Services.ConvertRequest(fromCurrency, toCurrency, amount);
-    //         Exchange.Services.ConvertResponse response = await _exchangeRatesApi.ConvertAsync(request);
-
-    //         //Preparing data to pass to the View
-    //         ViewData["Amount"] = amount;
-    //         ViewData["FromCurrency"] = fromCurrency;
-    //         ViewData["ToCurrency"] = toCurrency;
-    //         ViewData["ConvertedAmount"] = response.Result;
-
-    //         return View("Index");
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         ViewData["Error"] = ex.Message;
-    //         return View("Index");
-    //     }
-    // }
-
 }
